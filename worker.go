@@ -42,6 +42,7 @@ func NewWorker(cfg *WorkerConfig) *Worker {
 	w.cli = redis.NewClient(&redis.Options{
 		Addr: cfg.RedisAddr,
 	})
+	rsmq.GroupCreateMkStream(w.cli, w.CStream, cfg.CGroup)
 	w.Consumer = rsmq.NewConsumer(w.cli, cfg.CStream,
 		cfg.CGroup, cfg.CName, cfg.CBlock, cfg.CMaxIdle)
 	w.Producer = rsmq.NewProducer(w.cli, cfg.PMaxLen, true)
